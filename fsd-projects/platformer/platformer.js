@@ -26,21 +26,25 @@ $(function () {
     // ONLY CHANGE BELOW THIS POINT //
     //////////////////////////////////
 
-    // TODO 1 - Enable the Grid
-    // toggleGrid();
+// TODO 1 - Enable the Grid
+//toggleGrid();
+
+// TODO 2 - Create Platforms
+createPlatform(500, 0, 1, 800,) //Invis Wall in mid
+// x y w h
+createPlatform(400, 700, 100, 100,)
 
 
-    // TODO 2 - Create Platforms
+// TODO 3 - Create Collectables
+//createCollectable("name", xPos, yPos, GravityNum, BounceNum)
+createCollectable("database", 100, 0, 0.1, 1)
+createCollectable("database", 200, 0, 0.1, 1)
+createCollectable("database", 300, 0, 0.1, 1)
 
 
-
-
-    // TODO 3 - Create Collectables
-
-
-
-    
-    // TODO 4 - Create Cannons
+// TODO 4 - Create Cannons
+createCannon("top", 300, 1000);
+createCannon("left", 400, 2000);
 
 
     
