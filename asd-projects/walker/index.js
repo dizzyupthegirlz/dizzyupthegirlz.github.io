@@ -1,8 +1,8 @@
 /* global $, sessionStorage */
 
 $(document).ready(runProgram); // wait for the HTML / CSS elements of the page to fully load, then execute runProgram()
-  
-function runProgram(){
+
+function runProgram() {
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////// SETUP /////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
@@ -10,49 +10,115 @@ function runProgram(){
   // Constant Variables
   var FRAME_RATE = 60;
   var FRAMES_PER_SECOND_INTERVAL = 1000 / FRAME_RATE;
-  
-  // Game Item Objects
+  var KEY = {
+    ENTER: 13,
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    DOWN: 40,
+    A: 65,
+    W: 87,
+    D: 68,
+    S: 83,
+  };
 
+  // Game Item Objects
+  var walker = {
+    X: 0,
+    Y: 0,
+    speedX: 0,
+    speedY: 0,
+  };
 
   // one-time setup
-  var interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL);   // execute newFrame every 0.0166 seconds (60 Frames per second)
+  var interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL); // execute newFrame every 0.0166 seconds (60 Frames per second)
 
-  /* 
+  /*
   This section is where you set up event listeners for user input.
   For example, if you wanted to handle a click event on the document, you would replace 'eventType' with 'click', and if you wanted to execute a function named 'handleClick', you would replace 'handleEvent' with 'handleClick'.
 
+
   Note: You can have multiple event listeners for different types of events.
   */
-  $(document).on('eventType', handleEvent);                          
+  $(document).on("keydown", handleKeyDown);
+  $(document).on("keyup", handleKeyUp);
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////// CORE LOGIC ///////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
 
-  /* 
+  /*
   On each "tick" of the timer, a new frame is dynamically drawn using JavaScript
   by calling this function and executing the code inside.
   */
   function newFrame() {
-    
-
+    repositionGameItem();
+    wallCollision();
+    redrawGameItem();
   }
-  
-  /* 
+
+  /*
   This section is where you set up the event handlers for user input.
   For example, if you wanted to make an event handler for a click event, you should rename this function to 'handleClick', then write the code that should execute when the click event occurs.
-  
+ 
   Note: You can have multiple event handlers for different types of events.
   */
-  function handleEvent(event) {
+  function handleKeyDown(event) {
+    if (event.which === KEY.LEFT) {
+      walker.speedX = -5;
+    }
+    if (event.which === KEY.RIGHT) {
+      walker.speedX = 5;
+    }
+    if (event.which === KEY.UP) {
+      walker.speedY = -5;
+    }
+    if (event.which === KEY.DOWN) {
+      walker.speedY = 5;
+    }
+  }
 
+  function handleKeyUp(event) {
+    if (event.which === KEY.UP || event.which === KEY.DOWN) {
+      walker.speedY = 0;
+    }
+
+    if (event.which === KEY.LEFT || event.which === KEY.RIGHT) {
+      walker.speedX = 0;
+    }
   }
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// HELPER FUNCTIONS ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
 
-  
+  function repositionGameItem() {
+    walker.X = walker.X + walker.speedX;
+    walker.Y = walker.Y + walker.speedY;
+  }
+
+  function redrawGameItem() {
+    $("#walker").css("left", walker.X);
+    $("#walker").css("top", walker.Y);
+  }
+
+  function wallCollision() {
+    var bWidth = $("#board").width() - 50;
+    var bHeight = $("#board").height() - 50;
+    if (walker.X < 0) {
+      walker.X = 0;
+    }
+    if (walker.Y < 0) {
+      walker.Y = 0;
+    }
+    if (walker.X > bWidth) {
+      walker.X = bWidth;
+    }
+    if (walker.Y > bHeight) {
+      walker.Y = bHeight;
+    }
+  }
+
   function endGame() {
     // stop the interval timer
     clearInterval(interval);
@@ -60,5 +126,4 @@ function runProgram(){
     // turn off event handlers
     $(document).off();
   }
-  
 }
