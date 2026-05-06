@@ -1,5 +1,3 @@
-// This is a small program. There are only two sections. This first section is what runs
-// as soon as the page loads.
 $(document).ready(function () {
   render($("#display"), image);
   $("#apply").on("click", applyAndRender);
